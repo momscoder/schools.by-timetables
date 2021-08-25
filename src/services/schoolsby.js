@@ -6,6 +6,8 @@ import DOMParser from "react-native-html-parser";
 const RCTNetworking = require("react-native/Libraries/Network/RCTNetworking");
 import setCookie from "set-cookie-parser";
 
+const days = ["mon", "thu", "tue", "fri", "wed", "sat"];
+
 // https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string
 const extractHostname = (url) => {
   var hostname;
@@ -45,7 +47,7 @@ export async function login(username, password) {
   try {
     response = await fetch("https://schools.by/login");
   } catch (error) {
-    console.log(error);
+    console.log("login1: " + error);
     return false;
   }
 
@@ -66,7 +68,7 @@ export async function login(username, password) {
       { headers: { Referer: "https://schools.by/login" } }
     );
   } catch (error) {
-    console.log(error);
+    console.log("login2: " + error);
     return false;
   }
 
@@ -95,7 +97,7 @@ export async function downloadClassId(url) {
     await AsyncStorage.setItem("classId", classId);
     return await downloadTimetable();
   } catch (error) {
-    console.log(error);
+    console.log("dlClassId: " + error);
     return false;
   }
 }
@@ -121,10 +123,9 @@ export async function downloadTimetable() {
     const doc2 = doc.getElementsByClassName("ttb_box", false); // exactMatch === false because one week day also has class today (div.ttb_box.today)
     if (doc2.length !== 6) return false;
 
-    const timetable_complete = [];
     const dayOfWeek_queue = [0, 2, 4, 1, 3, 5]; // schools.by show days like this: Mon -> Thu -> Tue -> Fri -> Wed -> Sat
     while (dayOfWeek_queue.length) {
-      const trs = doc2[dayOfWeek_queue.shift()].getElementsByTagName("tr");
+      const trs = doc2[dayOfWeek_queue[0]].getElementsByTagName("tr");
       const timetable_day = [];
 
       // skip first <tr>
@@ -136,7 +137,8 @@ export async function downloadTimetable() {
           tr
             .getElementsByClassName("time")[0]
             .textContent.trim()
-            .replace(/^\s+|\s+$|\s+(?=\s)/g, "") || "00:00 – 00:00";
+            .replace(/^\s+|\s+$|\s+(?=\s)/g, "")
+            .replace(" – ", " ") || "00:00 00:00";
         // schools.by has time string like this:
         /*
 
@@ -155,17 +157,20 @@ export async function downloadTimetable() {
                 .map((span) => span.textContent.trim())
                 .join(" ")
             )
-            .join("\n") || "Урок";
+            .join("\n") || "";
 
         timetable_lesson.cabs =
           Array.prototype.slice
             .call(tr.getElementsByClassName("cabinet"))
             .map((cab) => cab.textContent.trim())
-            .join("\n") || "—";
+            .join("\n") || "";
 
         timetable_day.push(timetable_lesson);
       }
-      timetable_complete.push(timetable_day);
+      await AsyncStorage.setItem(
+        days[dayOfWeek_queue.shift()],
+        JSON.stringify(timetable_day)
+      );
     }
 
     /*
@@ -207,11 +212,11 @@ export async function downloadTimetable() {
 			]
 		*/
 
-    await AsyncStorage.setItem("timetable", JSON.stringify(timetable_complete));
+    //await AsyncStorage.setItem("timetable", JSON.stringify(timetable_complete));
 
     return true;
   } catch (error) {
-    console.log(error);
+    console.log("dlTtbl: " + error);
     return false;
   }
 }

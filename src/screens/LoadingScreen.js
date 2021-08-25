@@ -9,16 +9,18 @@ import {
   Easing,
 } from "react-native";
 
+import { StatusBar } from "expo-status-bar";
+
 import { Actions } from "react-native-router-flux";
 import Button from "react-native-button";
 
 import { login } from "../services/schoolsby";
 
 const switchToMain = () => {
-  Actions.replace("main");
+  Actions.replace("mainTabBar");
 };
 
-const LoadingScene = () => {
+const LoadingScreen = () => {
   const mountedRef = useRef();
 
   const [LogoAnim, setLogoAnim] = useState(new Animated.Value(0));
@@ -80,6 +82,7 @@ const LoadingScene = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="dark" />
       <Animated.View
         style={{
           opacity: LogoAnim,
@@ -146,11 +149,11 @@ const LoadingScene = () => {
   );
 };
 
-export default LoadingScene;
+export default LoadingScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 3,
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
   logoText: {
     color: "#000",
     fontFamily: "Inter-Black",
-    fontSize: 20,
+    fontSize: 17,
     fontWeight: "300",
   },
   input: {
@@ -184,6 +187,7 @@ const styles = StyleSheet.create({
     height: 50,
     textAlign: "center",
     color: "#fff",
+    fontFamily: "Inter-Regular",
   },
   button: {
     height: 50,

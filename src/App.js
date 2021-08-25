@@ -4,13 +4,14 @@ import { useFonts } from "expo-font";
 
 import React, { useEffect, useState } from "react";
 
-import { Router, Scene } from "react-native-router-flux";
+import { ActionConst, Router, Scene } from "react-native-router-flux";
 
-import LoadingScene from "./scenes/LoadingScene";
-import MainScene from "./scenes/MainScene";
+import WeekDay from "./components/WeekDay";
+import LoadingScreen from "./screens/LoadingScreen";
 
 let customFonts = {
   "Inter-Black": require("../assets/fonts/Inter/Inter-Black.otf"),
+  "Inter-Regular": require("../assets/fonts/Inter/Inter-Regular.otf"),
 };
 
 export default function App() {
@@ -35,16 +36,68 @@ export default function App() {
       <Scene key="root">
         <Scene
           key="loading"
-          component={LoadingScene}
+          component={LoadingScreen}
           initial={!loggedIn}
-          hideNavBar
-        ></Scene>
+          headerShown={false}
+        />
         <Scene
-          key="main"
-          component={MainScene}
           initial={loggedIn}
-          hideNavBar
-        ></Scene>
+          tabs
+          legacy
+          swipeEnabled
+          key="mainTabBar"
+          headerShown={false}
+          tabBarPosition="top"
+          tabBarStyle={{
+            marginTop: "8%",
+            backgroundColor: "#000",
+          }}
+          labelStyle={{ fontFamily: "Inter-Regular" }}
+          type={ActionConst.RESET}
+        >
+          <Scene
+            key="mon"
+            dayName="mon"
+            component={WeekDay}
+            title="Пн"
+            headerShown={false}
+          />
+          <Scene
+            key="tue"
+            dayName="tue"
+            component={WeekDay}
+            title="Вт"
+            headerShown={false}
+          />
+          <Scene
+            key="wed"
+            dayName="wed"
+            component={WeekDay}
+            title="Ср"
+            headerShown={false}
+          />
+          <Scene
+            key="thu"
+            dayName="thu"
+            component={WeekDay}
+            title="Чт"
+            headerShown={false}
+          />
+          <Scene
+            key="fri"
+            dayName="fri"
+            component={WeekDay}
+            title="Пт"
+            headerShown={false}
+          />
+          <Scene
+            key="sat"
+            dayName="sat"
+            component={WeekDay}
+            title="Сб"
+            headerShown={false}
+          />
+        </Scene>
       </Scene>
     </Router>
   );
