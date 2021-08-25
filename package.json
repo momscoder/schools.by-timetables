@@ -23,6 +23,7 @@
     "react-native-reanimated": "^2.2.0",
     "react-native-router-flux": "^4.3.1",
     "react-native-screens": "^3.5.0",
+    "react-native-table-component": "^1.2.1",
     "react-native-web": "~0.13.12",
     "set-cookie-parser": "^2.4.8"
   },
