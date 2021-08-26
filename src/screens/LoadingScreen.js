@@ -17,7 +17,7 @@ import Button from "react-native-button";
 import { login } from "../services/schoolsby";
 
 const switchToMain = () => {
-  Actions.replace("mainTabBar");
+  Actions.replace("main");
 };
 
 const LoadingScreen = () => {

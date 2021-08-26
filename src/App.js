@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 
 import { ActionConst, Router, Scene } from "react-native-router-flux";
 
-import WeekDay from "./components/WeekDay";
 import LoadingScreen from "./screens/LoadingScreen";
+import MainScreen from "./screens/MainScreen";
 
 let customFonts = {
   "Inter-Black": require("../assets/fonts/Inter/Inter-Black.otf"),
@@ -41,63 +41,12 @@ export default function App() {
           headerShown={false}
         />
         <Scene
+          key="main"
+          component={MainScreen}
           initial={loggedIn}
-          tabs
-          legacy
-          swipeEnabled
-          key="mainTabBar"
           headerShown={false}
-          tabBarPosition="top"
-          tabBarStyle={{
-            marginTop: "8%",
-            backgroundColor: "#000",
-          }}
-          labelStyle={{ fontFamily: "Inter-Regular" }}
           type={ActionConst.RESET}
-        >
-          <Scene
-            key="mon"
-            dayName="mon"
-            component={WeekDay}
-            title="Пн"
-            headerShown={false}
-          />
-          <Scene
-            key="tue"
-            dayName="tue"
-            component={WeekDay}
-            title="Вт"
-            headerShown={false}
-          />
-          <Scene
-            key="wed"
-            dayName="wed"
-            component={WeekDay}
-            title="Ср"
-            headerShown={false}
-          />
-          <Scene
-            key="thu"
-            dayName="thu"
-            component={WeekDay}
-            title="Чт"
-            headerShown={false}
-          />
-          <Scene
-            key="fri"
-            dayName="fri"
-            component={WeekDay}
-            title="Пт"
-            headerShown={false}
-          />
-          <Scene
-            key="sat"
-            dayName="sat"
-            component={WeekDay}
-            title="Сб"
-            headerShown={false}
-          />
-        </Scene>
+        />
       </Scene>
     </Router>
   );

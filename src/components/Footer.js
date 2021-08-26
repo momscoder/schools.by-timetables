@@ -42,6 +42,7 @@ export default Footer;
 const styles = StyleSheet.create({
   footer: {
     position: "absolute",
+    alignSelf: "center",
     bottom: 7,
     backgroundColor: "#000",
     alignItems: "center",
