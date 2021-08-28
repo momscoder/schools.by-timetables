@@ -2,7 +2,7 @@
   "expo": {
     "name": "schools.by-timetables",
     "slug": "schoolsby-timetables",
-    "version": "0.2",
+    "version": "0.2.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {

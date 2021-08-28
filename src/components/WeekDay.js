@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Text, StyleSheet } from "react-native";
+import { Text, StyleSheet, Dimensions } from "react-native";
 import { Table, Row } from "react-native-table-component";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AppLoading from "expo-app-loading";
 import { TabView } from "react-native-elements";
 
 const flexArr = [1, 2, 9, 2];
+const windowHeight = Dimensions.get("window").height;
 
 const WeekDay = (props) => {
   //const [tableHead, setTableHead] = useState(["№", "Время", "Урок", "Кабинет"]);
   const [tableData, setTableData] = useState([]);
+  const [winHeight, setWinHeight] = useState(windowHeight);
 
   async function loadTimetable() {
     const value = JSON.parse(await AsyncStorage.getItem(props.dayName));
@@ -29,6 +30,13 @@ const WeekDay = (props) => {
   }
 
   useEffect(() => {
+    const sub = Dimensions.addEventListener("change", ({ window, screen }) => {
+      setWinHeight(window.height);
+    });
+    return () => sub?.remove();
+  }, []);
+
+  useEffect(() => {
     if (props.refreshTimetable) {
       loadTimetable();
       props.setRefreshTimetable(false);
@@ -44,11 +52,11 @@ const WeekDay = (props) => {
       return (
         <Text style={[styles.text, { alignSelf: "center" }]}>Я загружаюсь</Text>
       );
-    }, [tableData]);
+    }, [tableData, winHeight]);
 
   return useMemo(() => {
     return (
-      <TabView.Item style={styles.container}>
+      <TabView.Item style={[styles.container, { height: winHeight }]}>
         <Table
           style={{ top: 0 }}
           borderStyle={{ borderWidth: 0, borderColor: "#000" }}
@@ -57,7 +65,6 @@ const WeekDay = (props) => {
             <Row
               key={index}
               data={rowData}
-              widthArr={[100, 100, 100, 100]}
               flexArr={flexArr}
               style={[
                 styles.row,
@@ -69,7 +76,7 @@ const WeekDay = (props) => {
         </Table>
       </TabView.Item>
     );
-  }, [tableData]);
+  }, [tableData, winHeight]);
 };
 
 /*
