@@ -28,7 +28,8 @@ const MainScreen = () => {
   const [successRefresh, setSuccessRefresh] = useState(false);
 
   useEffect(() => {
-    setIndex(new Date().getDay() - 1 || 0);
+    const today = new Date().getDay() - 1;
+    setIndex(today < 0 ? 0 : today);
   }, []);
 
   const onRefresh = React.useCallback(() => {
